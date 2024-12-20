@@ -1,21 +1,44 @@
+"use client";
+import { useContext, ReactNode, useEffect } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import Footer from "./components/Footer/Footer";
 import Navbar from "./components/Navbar/Navbar";
 import "./globals.scss";
+import { AuthContext, AuthContextProvider } from "./context/AuthContext";
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+interface RootLayoutProps {
+  children: ReactNode;
+}
+
+export default function RootLayout({ children }: RootLayoutProps) {
+  const { currentUser } = useContext(AuthContext);
+  const router = useRouter();
+  const loginPath = usePathname();
+
+  const RequireAuth = ({ children }: { children: ReactNode }) => {
+    useEffect(() => {
+      if (currentUser === null) {
+        router.push("/login");
+      }
+    }, [currentUser, router]);
+
+    if (!currentUser) {
+      return null;
+    }
+    return <>{children}</>;
+  };
+
+  let isLoginOrSignup =
+    loginPath === "/login" || loginPath === "/signup" || loginPath === "/";
   return (
-    <>
-      <html lang="en">
-        <body>
+    <html lang="en">
+      <body>
+        <AuthContextProvider>
           <Navbar />
-          {children}
+          {isLoginOrSignup ? children : <RequireAuth>{children}</RequireAuth>}
           <Footer />
-        </body>
-      </html>
-    </>
+        </AuthContextProvider>
+      </body>
+    </html>
   );
 }
