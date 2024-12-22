@@ -141,8 +141,8 @@ function Page() {
 
   return (
     <div className="container">
-      <h1>Sign up</h1>
-      <form onSubmit={handleLogin} className="loginForm">
+      <h1 style={{ color: "#cccaca" }}>Sign up</h1>
+      <form onSubmit={handleLogin} className="signUpForm">
         <div className="input-group">
           <input
             type="text"
@@ -210,7 +210,7 @@ function Page() {
       <p>
         Already have an account?
         <Link href={"/login"}>
-          <span>Login</span>
+          <span> Login</span>
         </Link>
       </p>
     </div>

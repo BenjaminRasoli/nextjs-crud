@@ -1,5 +1,5 @@
 "use client";
-import { useContext, useEffect, useState, CSSProperties } from "react";
+import { useContext, useEffect, useState } from "react";
 import { db } from "./config/firebase-config";
 import placeHolder from "./assets/placeholder-icon-design-free-vector.jpg";
 import "./home.scss";
@@ -13,7 +13,6 @@ import {
   deleteDoc,
   setDoc,
 } from "firebase/firestore";
-import ClipLoader from "react-spinners/ClipLoader";
 import { BarLoader } from "react-spinners";
 import { MdDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
@@ -32,7 +31,6 @@ function Home() {
   const { currentUser } = useContext(AuthContext);
   const [editingPostId, setEditingPostId] = useState<string | null>(null);
   const [editFormData, setEditFormData] = useState<Partial<Post>>({});
-  let [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const unsub = onSnapshot(
@@ -88,11 +86,10 @@ function Home() {
   const handleCancel = () => {
     setEditingPostId(null);
   };
-
   return (
     <>
       <div className="container">
-        <h1>Project List</h1>
+        <h1 className="home-h1">Project List</h1>
         {posts.length > 0 ? (
           <section className="post-grid">
             {posts.map((post) => (
@@ -136,7 +133,7 @@ function Home() {
                       <p>
                         <b> owner:</b> {post.userName || "N/A"}
                       </p>
-                      {post.currentUser === currentUser?.uid ? (
+                      {post.id === currentUser?.uid ? (
                         <>
                           <div className="card-buttons">
                             <button

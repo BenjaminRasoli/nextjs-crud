@@ -1,4 +1,6 @@
-.loginForm {
+@import "../../globals.scss";
+
+.signUpForm {
   display: flex;
   flex-direction: column;
   margin: 10px;
@@ -10,11 +12,12 @@
 
     input {
       padding: 10px;
+      margin-top: 20px;
     }
-
+    
     .error {
-      color: red;
-      font-size: 12px;
+      color: rgb(255, 0, 0);
+      font-size: 18px;
       margin-top: 4px;
     }
   }
@@ -22,9 +25,21 @@
   button {
     margin: 10px 0;
     padding: 10px;
+    border: none;
+  }
+  button:hover {
+    cursor: pointer;
+    color: $text-color;
+    background-color: $primary-color;
+  }
+
+  button:hover {
+    cursor: pointer;
+    color: $text-color;
+    background-color: $primary-color;
   }
 }
 
 span {
-  color: #00aaff;
+  color: $primary-color;
 }

@@ -1,3 +1,5 @@
+@import "../../../globals.scss";
+
 html,
 body {
   height: 100%;
@@ -11,8 +13,8 @@ body {
 }
 
 .footer {
-  background-color: #222;
-  color: #fff;
+  background-color: $primary-color;
+  color: $text-color;
   padding: 35px 0;
   text-align: center;
   width: 100%;
@@ -27,7 +29,7 @@ body {
 
 .footer-content p {
   margin: 0;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .footer-links {
@@ -40,7 +42,7 @@ body {
 }
 
 .footer-links li a {
-  color: #00aaff;
+  color: $text-color;
   text-decoration: none;
   font-size: 14px;
 }

@@ -1,4 +1,6 @@
-.loginForm {
+@import "../../../globals.scss";
+
+.uploadForm {
   display: flex;
   flex-direction: column;
   margin: 10px;
@@ -13,14 +15,19 @@
     position: absolute;
     z-index: -1;
   }
+
   .custom-file-label {
     display: inline-block;
     padding: 10px;
-    background-color: #007bff;
-    color: white;
+    margin: 10px;
+    background-color: $primary-color;
     cursor: pointer;
     text-align: center;
     border-radius: 5px;
+  }
+
+  .upload-label {
+    text-align: center;
   }
 
   .upload-field {
@@ -36,8 +43,8 @@
     }
 
     .error {
-      color: red;
-      font-size: 12px;
+      color: rgb(255, 0, 0);
+      font-size: 18px;
       margin-top: 4px;
     }
   }
@@ -52,8 +59,8 @@
     }
 
     .error {
-      color: red;
-      font-size: 12px;
+      color: rgb(255, 0, 0);
+      font-size: 18px;
       margin-top: 4px;
     }
   }
@@ -61,6 +68,13 @@
   button {
     margin: 10px 0;
     padding: 10px;
+    border: none;
+  }
+
+  button:hover {
+    cursor: pointer;
+    color: $text-color;
+    background-color: $primary-color;
   }
 }
 

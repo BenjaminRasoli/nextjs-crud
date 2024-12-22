@@ -1,6 +1,6 @@
 "use client";
-import React, { useContext, useEffect, useState } from "react";
-import { collection, addDoc } from "firebase/firestore";
+import React, { useContext, useState } from "react";
+import { doc, setDoc } from "firebase/firestore";
 import { db } from "../../config/firebase-config";
 import "./styles/post.scss";
 import { AuthContext } from "@/app/context/AuthContext";
@@ -137,7 +137,7 @@ function Page() {
       return;
     }
     try {
-      await addDoc(collection(db, "post"), {
+      await setDoc(doc(db, "post", currentUser.uid), {
         name: formData.project,
         description: formData.description,
         imageUrl: imageUrl,
@@ -155,9 +155,10 @@ function Page() {
 
   return (
     <div className="container">
-      <h1>Post</h1>
-
-      <form className="loginForm" onSubmit={handleFileUpload}>
+      <h1 style={{ color: "#cccaca" }}>
+        Post
+      </h1>
+      <form className="uploadForm" onSubmit={handleFileUpload}>
         <div className="upload-field">
           <label htmlFor="file" className="custom-file-label">
             Choose File
@@ -187,7 +188,7 @@ function Page() {
         )}
       </form>
 
-      <form className="loginForm" onSubmit={(e) => handlePost(e)}>
+      <form className="uploadForm" onSubmit={(e) => handlePost(e)}>
         <div className="input-group">
           <input
             name="project"

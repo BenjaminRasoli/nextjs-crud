@@ -84,7 +84,7 @@ function Page() {
 
   return (
     <div className="container">
-      <h1>Login</h1>
+      <h1 style={{ color: "#cccaca" }}>Login</h1>
       <form onSubmit={handleLogin} className="loginForm">
         <input
           type="email"
