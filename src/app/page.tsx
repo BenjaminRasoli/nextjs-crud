@@ -130,7 +130,7 @@ function Home() {
                   ) : (
                     <>
                       <h3>{post.name || "Unnamed Post"}</h3>
-                      <p>
+                      <p className="post-description">
                         <b> description:</b> {post.description || "N/A"}
                       </p>
                       <p>
