@@ -6,7 +6,7 @@ import { auth, db } from "../config/firebase-config";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { AuthContext } from "../context/AuthContext";
-import { collection, addDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 
 function Page() {
   interface UserData {
@@ -37,6 +37,7 @@ function Page() {
     userName: "",
     email: "",
     password: "",
+    invalid: "",
   });
 
   const validateForm = (): boolean => {
@@ -46,6 +47,7 @@ function Page() {
       userName: "",
       email: "",
       password: "",
+      invalid: "",
     };
 
     if (!/^[A-Za-z]+$/.test(userData.firstName)) {
@@ -86,7 +88,9 @@ function Page() {
       );
       const user = userCredential.user;
 
-      await addDoc(collection(db, "users"), {
+      const userDocRef = doc(db, "users", user.uid);
+
+      await setDoc(userDocRef, {
         firstName: userData.firstName,
         lastName: userData.lastName,
         userName: userData.userName,
@@ -95,6 +99,7 @@ function Page() {
         uid: user.uid,
         date: new Date().toLocaleDateString(),
       });
+
       dispatch({
         type: "LOGIN",
         payload: {
@@ -115,7 +120,10 @@ function Page() {
         date: new Date().toLocaleDateString(),
       });
     } catch (error) {
-      console.error("Error during sign up:", error);
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        invalid: "Invalid credentials. Please try again.",
+      }));
     }
   };
 
