@@ -2,61 +2,196 @@
 import React, { useContext, useState } from "react";
 import "./styles/signUp.scss";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../config/firebase-config";
+import { auth, db } from "../config/firebase-config";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { AuthContext } from "../context/AuthContext";
+import { collection, addDoc } from "firebase/firestore";
 
-function page() {
+function Page() {
+  interface UserData {
+    firstName: string;
+    lastName: string;
+    userName: string;
+    email: string;
+    password: string;
+    uid: string;
+    date: string;
+  }
+
   const router = useRouter();
-
-  const [email, setEmail] = useState<string>("");
-  const [password, setpassword] = useState<string>("");
   const { dispatch } = useContext(AuthContext);
+  const [userData, setUserData] = useState<UserData>({
+    firstName: "",
+    lastName: "",
+    userName: "",
+    email: "",
+    password: "",
+    uid: "",
+    date: new Date().toLocaleDateString(),
+  });
 
-  const handleLogin = (e: React.FormEvent<HTMLFormElement>): void => {
+  const [errors, setErrors] = useState({
+    firstName: "",
+    lastName: "",
+    userName: "",
+    email: "",
+    password: "",
+  });
+
+  const validateForm = (): boolean => {
+    const newErrors = {
+      firstName: "",
+      lastName: "",
+      userName: "",
+      email: "",
+      password: "",
+    };
+
+    if (!/^[A-Za-z]+$/.test(userData.firstName)) {
+      newErrors.firstName = "First name should contain only letters.";
+    }
+    if (!/^[A-Za-z]+$/.test(userData.lastName)) {
+      newErrors.lastName = "Last name should contain only letters.";
+    }
+    if (userData.userName.trim() === "") {
+      newErrors.userName = "User name cannot be empty.";
+    }
+    if (!/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(userData.email)) {
+      newErrors.email = "Invalid email address.";
+    }
+    if (userData.password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters long.";
+    }
+
+    setErrors(newErrors);
+
+    return Object.values(newErrors).every((error) => error === "");
+  };
+
+  const handleLogin = async (
+    e: React.FormEvent<HTMLFormElement>
+  ): Promise<void> => {
     e.preventDefault();
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        router.push("/");
-        dispatch({ type: "LOGIN", payload: user });
-        setEmail("");
-        setpassword("");
-      })
-      .catch((error) => {
-        console.log(error);
+
+    if (!validateForm()) {
+      return;
+    }
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        userData.email,
+        userData.password
+      );
+      const user = userCredential.user;
+
+      dispatch({ type: "LOGIN", payload: user });
+
+      await addDoc(collection(db, "users"), {
+        ...userData,
+        uid: user.uid,
       });
+
+      router.push("/");
+      setUserData({
+        firstName: "",
+        lastName: "",
+        userName: "",
+        email: "",
+        password: "",
+        uid: "",
+        date: new Date().toLocaleDateString(),
+      });
+    } catch (error) {
+      console.error("Error during sign up:", error);
+    }
+  };
+
+  const handleUserData = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const { name, value } = e.target;
+    setUserData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: "",
+    }));
   };
 
   return (
-    <>
-      <div className="container">
-        <h1>Sign up</h1>
-        <form onSubmit={handleLogin} className="loginForm">
+    <div className="container">
+      <h1>Sign up</h1>
+      <form onSubmit={handleLogin} className="loginForm">
+        <div className="input-group">
+          <input
+            type="text"
+            name="firstName"
+            placeholder="First Name"
+            value={userData.firstName}
+            onChange={handleUserData}
+          />
+          {errors.firstName && (
+            <span className="error">{errors.firstName}</span>
+          )}
+        </div>
+
+        <div className="input-group">
+          <input
+            type="text"
+            name="lastName"
+            placeholder="Last Name"
+            value={userData.lastName}
+            onChange={handleUserData}
+          />
+          {errors.lastName && <span className="error">{errors.lastName}</span>}
+        </div>
+
+        <div className="input-group">
+          <input
+            type="text"
+            name="userName"
+            placeholder="User Name"
+            value={userData.userName}
+            onChange={handleUserData}
+          />
+          {errors.userName && <span className="error">{errors.userName}</span>}
+        </div>
+
+        <div className="input-group">
           <input
             type="email"
-            placeholder="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            name="email"
+            placeholder="Email"
+            value={userData.email}
+            onChange={handleUserData}
           />
+          {errors.email && <span className="error">{errors.email}</span>}
+        </div>
+
+        <div className="input-group">
           <input
             type="password"
-            placeholder="password"
-            value={password}
-            onChange={(e) => setpassword(e.target.value)}
+            name="password"
+            placeholder="Password"
+            value={userData.password}
+            onChange={handleUserData}
           />
-          <button type="submit">Sign Up</button>
-        </form>
-        <p>
-          already have an account
-          <Link href={"/login"}>
-            <span> login</span>
-          </Link>
-        </p>
-      </div>
-    </>
+          {errors.password && <span className="error">{errors.password}</span>}
+        </div>
+
+        <button type="submit">Sign Up</button>
+      </form>
+
+      <p>
+        Already have an account?
+        <Link href={"/login"}>
+          <span>Login</span>
+        </Link>
+      </p>
+    </div>
   );
 }
 
-export default page;
+export default Page;
