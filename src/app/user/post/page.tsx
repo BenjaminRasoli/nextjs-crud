@@ -59,8 +59,6 @@ function Page() {
   };
   const router = useRouter();
 
-
-
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files) {
@@ -194,6 +192,7 @@ function Page() {
             placeholder="Project"
             onChange={handleChange}
             className="input-field"
+            maxLength={15}
           />
           {errors.project && <span className="error">{errors.project}</span>}
         </div>
