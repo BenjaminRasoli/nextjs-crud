@@ -5,7 +5,7 @@ import { db } from "../../config/firebase-config";
 import "./styles/post.scss";
 import { AuthContext } from "@/app/context/AuthContext";
 import { User } from "@/app/context/AuthReducer";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 function Page() {
   interface PostData {
@@ -24,6 +24,32 @@ function Page() {
     currentUser: { email: "", password: "", uid: "" },
   });
 
+  const [errors, setErrors] = useState({
+    project: "",
+    description: "",
+    file: "",
+  });
+
+  const validateForm = (): boolean => {
+    const newErrors = {
+      project: "",
+      description: "",
+      file: "",
+    };
+    if (formData.project.trim() === "") {
+      newErrors.project = "Project name cannot be empty.";
+    }
+    if (formData.description.trim() === "") {
+      newErrors.description = "Description name cannot be empty.";
+    }
+    if (!selectedFiles || selectedFiles.length === 0) {
+      newErrors.file = "An image must be uploaded.";
+    }
+
+    setErrors(newErrors);
+
+    return Object.values(newErrors).every((error) => error === "");
+  };
   const router = useRouter();
 
   useEffect(() => {
@@ -64,6 +90,11 @@ function Page() {
     });
     image.append("upload_preset", "djdus2et");
     const cloudinaryUrl = process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY;
+    if (!cloudinaryUrl) {
+      throw new Error(
+        "Cloudinary API URL is not set in the environment variables."
+      );
+    }
     try {
       const response = await fetch(cloudinaryUrl, {
         method: "POST",
@@ -89,23 +120,28 @@ function Page() {
     }));
   };
 
-  const handlePost = async (e) => {
+  const handlePost = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!validateForm()) {
+      return;
+    }
 
     const imageUrl = await handleFileUpload(e);
 
     if (!imageUrl) {
-      console.log("No image uploaded");
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        file: "Failed to upload the image. Please try again.",
+      }));
       return;
     }
     try {
-      const docRef = await addDoc(collection(db, "post"), {
+      await addDoc(collection(db, "post"), {
         name: formData.project,
         description: formData.description,
         imageUrl: imageUrl,
         currentUser: currentUser.uid,
       });
-      console.log("Document written with ID: ", docRef.id);
       router.push("/");
     } catch (error) {
       console.error("Error posting data:", error);
@@ -118,15 +154,20 @@ function Page() {
 
       <form className="loginForm" onSubmit={handleFileUpload}>
         <div className="upload-field">
-          <label htmlFor="projectDescription" className="upload-label">
-            Project image file
+          <label htmlFor="file" className="custom-file-label">
+            Choose File
           </label>
           <input
             type="file"
             name="file"
+            id="file"
             onChange={handleFileChange}
             className="upload-input"
           />
+          {selectedFiles && selectedFiles.length > 0 && (
+            <span className="file-name">{selectedFiles[0].name}</span>
+          )}
+          {errors.file && <span className="error">{errors.file}</span>}
         </div>
 
         {imagePreview && (
@@ -142,22 +183,30 @@ function Page() {
       </form>
 
       <form className="loginForm" onSubmit={(e) => handlePost(e)}>
-        <input
-          name="project"
-          value={formData.project}
-          type="text"
-          placeholder="Project"
-          onChange={handleChange}
-          className="input-field"
-        />
-        <input
-          name="description"
-          value={formData.description}
-          type="text"
-          placeholder="Description"
-          onChange={handleChange}
-          className="input-field"
-        />
+        <div className="input-group">
+          <input
+            name="project"
+            value={formData.project}
+            type="text"
+            placeholder="Project"
+            onChange={handleChange}
+            className="input-field"
+          />
+          {errors.project && <span className="error">{errors.project}</span>}
+        </div>
+        <div className="input-group">
+          <input
+            name="description"
+            value={formData.description}
+            type="text"
+            placeholder="Description"
+            onChange={handleChange}
+            className="input-field"
+          />
+          {errors.description && (
+            <span className="error">{errors.description}</span>
+          )}
+        </div>
 
         <button type="submit" className="submit-button">
           Post
