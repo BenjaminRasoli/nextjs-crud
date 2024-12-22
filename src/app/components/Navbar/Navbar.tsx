@@ -17,8 +17,13 @@ function Navbar() {
     <nav>
       <div>
         <Link href={"/"}>Home</Link>
-        <Link href={"/login"}>login</Link>
-        <Link href={"/signup"}>signup</Link>
+        {!currentUser && (
+          <>
+            <Link href={"/login"}>login</Link>
+            <Link href={"/signup"}>signup</Link>
+          </>
+        )}
+
         {currentUser && (
           <>
             <Link href={"/user/post"}>post</Link>
@@ -29,10 +34,10 @@ function Navbar() {
 
       <div>
         {currentUser ? (
-          <h1>
-            Welcome {currentUser.userName}
+          <div>
+            <h1 className="welcome-text">Welcome {currentUser.userName}</h1>
             <button onClick={logout}>logout</button>
-          </h1>
+          </div>
         ) : null}
       </div>
     </nav>
