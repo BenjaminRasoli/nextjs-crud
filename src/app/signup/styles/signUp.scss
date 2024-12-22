@@ -3,9 +3,24 @@
   flex-direction: column;
   margin: 10px;
 
-  input,
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+
+    input {
+      padding: 10px;
+    }
+
+    .error {
+      color: red;
+      font-size: 12px;
+      margin-top: 4px;
+    }
+  }
+
   button {
-    margin: 10px;
+    margin: 10px 0;
     padding: 10px;
   }
 }
