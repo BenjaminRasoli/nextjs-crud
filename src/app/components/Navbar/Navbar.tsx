@@ -30,7 +30,7 @@ function Navbar() {
       <div>
         {currentUser ? (
           <h1>
-            Welcome {currentUser.email}
+            Welcome {currentUser.userName}
             <button onClick={logout}>logout</button>
           </h1>
         ) : null}

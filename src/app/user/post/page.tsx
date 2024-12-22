@@ -21,7 +21,14 @@ function Page() {
   const [formData, setFormData] = useState<PostData>({
     project: "",
     description: "",
-    currentUser: { email: "", password: "", uid: "" },
+    currentUser: {
+      email: "",
+      password: "",
+      uid: "",
+      firstName: "",
+      lastName: "",
+      userName: "",
+    },
   });
 
   const [errors, setErrors] = useState({
@@ -52,14 +59,7 @@ function Page() {
   };
   const router = useRouter();
 
-  useEffect(() => {
-    if (currentUser) {
-      setFormData((prevData) => ({
-        ...prevData,
-        currentUser: currentUser,
-      }));
-    }
-  }, [currentUser]);
+
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -140,7 +140,10 @@ function Page() {
         name: formData.project,
         description: formData.description,
         imageUrl: imageUrl,
-        currentUser: currentUser.uid,
+        userId: currentUser.uid,
+        firstName: currentUser.firstName,
+        lastName: currentUser.lastName,
+        userName: currentUser.userName,
       });
       router.push("/");
     } catch (error) {

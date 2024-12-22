@@ -5,10 +5,11 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { auth } from "../config/firebase-config";
+import { auth, db } from "../config/firebase-config";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { AuthContext } from "../context/AuthContext";
+import { doc, getDoc } from "firebase/firestore";
 
 function Page() {
   const router = useRouter();
@@ -17,19 +18,38 @@ function Page() {
   const [email, setEmail] = useState<string>("test@gmail.com");
   const [password, setPassword] = useState<string>("123456");
 
-  const handleLogin = (e: React.FormEvent<HTMLFormElement>): void => {
+  const handleLogin = async (
+    e: React.FormEvent<HTMLFormElement>
+  ): Promise<void> => {
     e.preventDefault();
-    signInWithEmailAndPassword(auth, email, password)
-      .then(async (userCredential) => {
-        const user = userCredential.user;
-        dispatch({ type: "LOGIN", payload: user });
-        setEmail("");
-        setPassword("");
-        router.push("/");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      const user = userCredential.user;
+      const userDoc = await getDoc(doc(db, "users", user.uid));
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        dispatch({
+          type: "LOGIN",
+          payload: {
+            ...user,
+            firstName: userData.firstName,
+            lastName: userData.lastName,
+            userName: userData.userName,
+          },
+        });
+      }
+
+      setEmail("");
+      setPassword("");
+      router.push("/");
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <div className="container">

@@ -134,7 +134,7 @@ function Home() {
                         <b> description:</b> {post.description || "N/A"}
                       </p>
                       <p>
-                        <b> owner:</b> {post.owner || "N/A"}
+                        <b> owner:</b> {post.userName || "N/A"}
                       </p>
                       {post.currentUser === currentUser?.uid ? (
                         <>

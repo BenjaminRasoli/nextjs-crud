@@ -86,13 +86,23 @@ function Page() {
       );
       const user = userCredential.user;
 
-      dispatch({ type: "LOGIN", payload: user });
-
       await addDoc(collection(db, "users"), {
-        ...userData,
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        userName: userData.userName,
+        email: userData.email,
         uid: user.uid,
+        date: new Date().toLocaleDateString(),
       });
-
+      dispatch({
+        type: "LOGIN",
+        payload: {
+          ...user,
+          firstName: userData.firstName,
+          lastName: userData.lastName,
+          userName: userData.userName,
+        },
+      });
       router.push("/");
       setUserData({
         firstName: "",

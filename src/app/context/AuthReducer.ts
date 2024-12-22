@@ -1,7 +1,10 @@
- export interface User {
+export interface User {
   email: string;
   password: string;
   uid: string;
+  firstName: string;
+  lastName: string;
+  userName: string;
 }
 
 type AuthState = {
