@@ -1,7 +1,32 @@
-import React from "react";
+"use client";
+import { AuthContext } from "@/app/context/AuthContext";
+import React, { useContext } from "react";
+import "./styles/userInfo.scss";
 
-function page() {
-  return <div>userinfo</div>;
+function Page() {
+  const { currentUser } = useContext(AuthContext);
+  return (
+    <div className="user-info-container">
+      <div className="user-info-header">
+        <h1>User Information</h1>
+      </div>
+
+      <div className="user-info-card">
+        <div className="user-info-field">
+          <strong>First Name:</strong> {currentUser.firstName}
+        </div>
+        <div className="user-info-field">
+          <strong>Last Name:</strong> {currentUser.lastName}
+        </div>
+        <div className="user-info-field">
+          <strong>User Name:</strong> {currentUser.userName}
+        </div>
+        <div className="user-info-field">
+          <strong>Email:</strong> {currentUser.email}
+        </div>
+      </div>
+    </div>
+  );
 }
 
-export default page;
+export default Page;
