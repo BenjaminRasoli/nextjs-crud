@@ -16,6 +16,8 @@ function Page() {
 
   const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
   const { currentUser } = useContext(AuthContext);
 
   const [formData, setFormData] = useState<PostData>({
@@ -58,8 +60,6 @@ function Page() {
     return Object.values(newErrors).every((error) => error === "");
   };
   const router = useRouter();
-
-
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -125,6 +125,7 @@ function Page() {
     if (!validateForm()) {
       return;
     }
+    setIsSubmitting(true);
 
     const imageUrl = await handleFileUpload(e);
 
@@ -146,6 +147,7 @@ function Page() {
         userName: currentUser.userName,
       });
       router.push("/");
+      setIsSubmitting(false);
     } catch (error) {
       console.error("Error posting data:", error);
     }
@@ -211,8 +213,8 @@ function Page() {
           )}
         </div>
 
-        <button type="submit" className="submit-button">
-          Post
+        <button type="submit" disabled={isSubmitting} className="submit-button">
+          {isSubmitting ? "Posting...." : "Post"}
         </button>
       </form>
     </div>
