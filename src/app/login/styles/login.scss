@@ -5,8 +5,14 @@
 
   input,
   button {
-    margin: 10px;
+    margin-top: 20px;
     padding: 10px;
+  }
+
+  .error {
+    color: red;
+    font-size: 12px;
+    margin-top: 4px;
   }
 }
 

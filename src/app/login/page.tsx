@@ -18,10 +18,38 @@ function Page() {
   const [email, setEmail] = useState<string>("test@gmail.com");
   const [password, setPassword] = useState<string>("123456");
 
+  const [errors, setErrors] = useState({
+    email: "",
+    password: "",
+  });
+
+  const validateForm = (): boolean => {
+    const newErrors = {
+      email: "",
+      password: "",
+    };
+
+    if (!/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+      newErrors.email = "Invalid email address.";
+    }
+    if (password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters long.";
+    }
+
+    setErrors(newErrors);
+
+    return Object.values(newErrors).every((error) => error === "");
+  };
+
   const handleLogin = async (
     e: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
+
     try {
       const userCredential = await signInWithEmailAndPassword(
         auth,
@@ -59,18 +87,23 @@ function Page() {
           type="email"
           placeholder="email"
           value={email}
+          maxLength={25}
           onChange={(e) => setEmail(e.target.value)}
         />
+        {errors.email && <span className="error">{errors.email}</span>}
+
         <input
           type="password"
           placeholder="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+        {errors.password && <span className="error">{errors.password}</span>}
+
         <button type="submit">Login</button>
       </form>
       <p>
-        don't have an account{" "}
+        don't have an account
         <Link href={"/signup"}>
           <span> Sign Up</span>
         </Link>
