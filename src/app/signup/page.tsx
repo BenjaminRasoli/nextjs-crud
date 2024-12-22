@@ -90,6 +90,7 @@ function Page() {
         firstName: userData.firstName,
         lastName: userData.lastName,
         userName: userData.userName,
+        password: userData.password,
         email: userData.email,
         uid: user.uid,
         date: new Date().toLocaleDateString(),
@@ -141,6 +142,7 @@ function Page() {
             placeholder="First Name"
             value={userData.firstName}
             onChange={handleUserData}
+            maxLength={15}
           />
           {errors.firstName && (
             <span className="error">{errors.firstName}</span>
@@ -154,6 +156,7 @@ function Page() {
             placeholder="Last Name"
             value={userData.lastName}
             onChange={handleUserData}
+            maxLength={15}
           />
           {errors.lastName && <span className="error">{errors.lastName}</span>}
         </div>
@@ -165,17 +168,19 @@ function Page() {
             placeholder="User Name"
             value={userData.userName}
             onChange={handleUserData}
+            maxLength={15}
           />
           {errors.userName && <span className="error">{errors.userName}</span>}
         </div>
 
         <div className="input-group">
           <input
-            type="email"
+            type="text"
             name="email"
             placeholder="Email"
             value={userData.email}
             onChange={handleUserData}
+            maxLength={25}
           />
           {errors.email && <span className="error">{errors.email}</span>}
         </div>
