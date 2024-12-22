@@ -1,25 +1,41 @@
 "use client";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../../config/firebase-config";
-import "./styles/post.scss"; // Make sure the styles are linked
+import "./styles/post.scss";
+import { AuthContext } from "@/app/context/AuthContext";
+import { User } from "@/app/context/AuthReducer";
+import { useRouter, usePathname } from "next/navigation";
 
 function Page() {
   interface PostData {
     project: string;
     test1: string;
     test2: string;
+    currentUser: User;
   }
 
   const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
-  // const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null); // For preview
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const { currentUser } = useContext(AuthContext);
 
   const [formData, setFormData] = useState<PostData>({
     project: "",
     test1: "",
     test2: "",
+    currentUser: { email: "", password: "", uid: "" },
   });
+
+  const router = useRouter();
+
+  useEffect(() => {
+    if (currentUser) {
+      setFormData((prevData) => ({
+        ...prevData,
+        currentUser: currentUser,
+      }));
+    }
+  }, [currentUser]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -28,11 +44,11 @@ function Page() {
       const reader = new FileReader();
 
       reader.onloadend = () => {
-        setImagePreview(reader.result as string); // Set preview as base64 string
+        setImagePreview(reader.result as string);
       };
 
       if (files[0]) {
-        reader.readAsDataURL(files[0]); // Read the first selected file
+        reader.readAsDataURL(files[0]);
       }
     }
   };
@@ -48,8 +64,7 @@ function Page() {
     Array.from(selectedFiles).forEach((file) => {
       image.append("file", file);
     });
-    image.append("upload_preset", "djdus2et"); // Use your actual Cloudinary preset
-
+    image.append("upload_preset", "djdus2et");
     const cloudinaryUrl = process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY;
     try {
       const response = await fetch(cloudinaryUrl, {
@@ -91,8 +106,10 @@ function Page() {
         test1: formData.test1,
         test2: formData.test2,
         imageUrl: imageUrl,
+        currentUser: currentUser.uid,
       });
       console.log("Document written with ID: ", docRef.id);
+      router.push("/");
     } catch (error) {
       console.error("Error posting data:", error);
     }
@@ -102,7 +119,6 @@ function Page() {
     <div className="container">
       <h1>Post</h1>
 
-      {/* Image file selection and preview */}
       <form className="loginForm" onSubmit={handleFileUpload}>
         <div className="upload-field">
           <label htmlFor="projectDescription" className="upload-label">
@@ -128,7 +144,6 @@ function Page() {
         )}
       </form>
 
-      {/* Form for submitting project details */}
       <form className="loginForm" onSubmit={(e) => handlePost(e)}>
         <input
           name="project"
