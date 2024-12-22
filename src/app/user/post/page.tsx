@@ -10,8 +10,7 @@ import { useRouter, usePathname } from "next/navigation";
 function Page() {
   interface PostData {
     project: string;
-    test1: string;
-    test2: string;
+    description: string;
     currentUser: User;
   }
 
@@ -21,8 +20,7 @@ function Page() {
 
   const [formData, setFormData] = useState<PostData>({
     project: "",
-    test1: "",
-    test2: "",
+    description: "",
     currentUser: { email: "", password: "", uid: "" },
   });
 
@@ -103,8 +101,7 @@ function Page() {
     try {
       const docRef = await addDoc(collection(db, "post"), {
         name: formData.project,
-        test1: formData.test1,
-        test2: formData.test2,
+        description: formData.description,
         imageUrl: imageUrl,
         currentUser: currentUser.uid,
       });
@@ -154,21 +151,14 @@ function Page() {
           className="input-field"
         />
         <input
-          name="test1"
-          value={formData.test1}
+          name="description"
+          value={formData.description}
           type="text"
-          placeholder="Test 1"
+          placeholder="Description"
           onChange={handleChange}
           className="input-field"
         />
-        <input
-          name="test2"
-          value={formData.test2}
-          type="text"
-          placeholder="Test 2"
-          onChange={handleChange}
-          className="input-field"
-        />
+
         <button type="submit" className="submit-button">
           Post
         </button>
