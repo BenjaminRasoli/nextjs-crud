@@ -8,7 +8,7 @@ This project is a fully functional CRUD (Create, Read, Update, Delete) applicati
 ---
 ## Live Preview
 
-Link:[https://benjaminnextjscrud.vercel.app/](https://benjaminnextjscrud.vercel.app/) 
+Link: [https://benjaminnextjscrud.vercel.app/](https://benjaminnextjscrud.vercel.app/) 
 
 
 ---
