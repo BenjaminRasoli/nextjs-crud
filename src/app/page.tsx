@@ -86,6 +86,7 @@ function Home() {
   const handleCancel = () => {
     setEditingPostId(null);
   };
+
   return (
     <>
       <div className="container">

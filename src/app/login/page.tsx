@@ -10,7 +10,7 @@ import { doc, getDoc } from "firebase/firestore";
 
 function Page() {
   const router = useRouter();
-  const { dispatch } = useContext(AuthContext);
+  const { dispatch, currentUser } = useContext(AuthContext);
 
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -83,35 +83,43 @@ function Page() {
   };
 
   return (
-    <div className="container">
-      <h1 style={{ color: "#cccaca" }}>Login</h1>
-      <form onSubmit={handleLogin} className="loginForm">
-        <input
-          type="email"
-          placeholder="email"
-          value={email}
-          maxLength={25}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        {errors.email && <span className="error">{errors.email}</span>}
+    <div>
+      {!currentUser ? (
+        <div className="container">
+          <h1 style={{ color: "#cccaca" }}>Login</h1>
+          <form onSubmit={handleLogin} className="loginForm">
+            <input
+              type="email"
+              placeholder="email"
+              value={email}
+              maxLength={25}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            {errors.email && <span className="error">{errors.email}</span>}
 
-        <input
-          type="password"
-          placeholder="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        {errors.password && <span className="error">{errors.password}</span>}
+            <input
+              type="password"
+              placeholder="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            {errors.password && (
+              <span className="error">{errors.password}</span>
+            )}
 
-        <button type="submit">Login</button>
-        {errors.invalid && <span className="error">{errors.invalid}</span>}
-      </form>
-      <p>
-        don't have an account
-        <Link href={"/signup"}>
-          <span> Sign Up</span>
-        </Link>
-      </p>
+            <button type="submit">Login</button>
+            {errors.invalid && <span className="error">{errors.invalid}</span>}
+          </form>
+          <p style={{ color: "#cccaca" }}>
+            don't have an account?
+            <Link href={"/signup"}>
+              <span> Sign Up</span>
+            </Link>
+          </p>
+        </div>
+      ) : (
+        <div className="login-text">You are already logged in.</div>
+      )}
     </div>
   );
 }

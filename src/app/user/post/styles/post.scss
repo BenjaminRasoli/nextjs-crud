@@ -82,3 +82,24 @@
   width: 400px;
   height: auto;
 }
+
+.post-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+  font-size: 18px;
+  color: $text-color;
+}
+
+.link {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: bold;
+  margin: 0 5px;
+}
+
+.link:hover {
+  text-decoration: underline;
+}

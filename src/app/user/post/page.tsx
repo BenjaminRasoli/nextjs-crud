@@ -6,6 +6,7 @@ import "./styles/post.scss";
 import { AuthContext } from "@/app/context/AuthContext";
 import { User } from "@/app/context/AuthReducer";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 function Page() {
   interface PostData {
@@ -32,6 +33,7 @@ function Page() {
       userName: "",
     },
   });
+  const router = useRouter();
 
   const [errors, setErrors] = useState({
     project: "",
@@ -59,7 +61,6 @@ function Page() {
 
     return Object.values(newErrors).every((error) => error === "");
   };
-  const router = useRouter();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -88,7 +89,12 @@ function Page() {
     Array.from(selectedFiles).forEach((file) => {
       image.append("file", file);
     });
-    image.append("upload_preset", "djdus2et");
+    
+    const cloudinaryPrest = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET;
+    if (!cloudinaryPrest) {
+      throw new Error("Cloudinary upload preset is not set.");
+    }
+    image.append("upload_preset", cloudinaryPrest);
     const cloudinaryUrl = process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY;
     if (!cloudinaryUrl) {
       throw new Error(
@@ -154,71 +160,91 @@ function Page() {
   };
 
   return (
-    <div className="container">
-      <h1 style={{ color: "#cccaca" }}>
-        Post
-      </h1>
-      <form className="uploadForm" onSubmit={handleFileUpload}>
-        <div className="upload-field">
-          <label htmlFor="file" className="custom-file-label">
-            Choose File
-          </label>
-          <input
-            type="file"
-            name="file"
-            id="file"
-            onChange={handleFileChange}
-            className="upload-input"
-          />
-          {selectedFiles && selectedFiles.length > 0 && (
-            <span className="file-name">{selectedFiles[0].name}</span>
-          )}
-          {errors.file && <span className="error">{errors.file}</span>}
-        </div>
+    <div>
+      {currentUser ? (
+        <div className="container">
+          <h1 style={{ color: "#cccaca" }}>Post</h1>
+          <form className="uploadForm" onSubmit={handleFileUpload}>
+            <div className="upload-field">
+              <label htmlFor="file" className="custom-file-label">
+                Choose File
+              </label>
+              <input
+                type="file"
+                name="file"
+                id="file"
+                onChange={handleFileChange}
+                className="upload-input"
+              />
+              {selectedFiles && selectedFiles.length > 0 && (
+                <span className="file-name">{selectedFiles[0].name}</span>
+              )}
+              {errors.file && <span className="error">{errors.file}</span>}
+            </div>
 
-        {imagePreview && (
-          <div className="image-preview">
-            <h3 className="upload-label">Image Preview</h3>
-            <img
-              src={imagePreview}
-              alt="Selected Preview"
-              className="image-preview-img"
-            />
-          </div>
-        )}
-      </form>
+            {imagePreview && (
+              <div className="image-preview">
+                <h3 className="upload-label">Image Preview</h3>
+                <img
+                  src={imagePreview}
+                  alt="Selected Preview"
+                  className="image-preview-img"
+                />
+              </div>
+            )}
+          </form>
 
-      <form className="uploadForm" onSubmit={(e) => handlePost(e)}>
-        <div className="input-group">
-          <input
-            name="project"
-            value={formData.project}
-            type="text"
-            placeholder="Project"
-            onChange={handleChange}
-            className="input-field"
-            maxLength={15}
-          />
-          {errors.project && <span className="error">{errors.project}</span>}
-        </div>
-        <div className="input-group">
-          <input
-            name="description"
-            value={formData.description}
-            type="text"
-            placeholder="Description"
-            onChange={handleChange}
-            className="input-field"
-          />
-          {errors.description && (
-            <span className="error">{errors.description}</span>
-          )}
-        </div>
+          <form className="uploadForm" onSubmit={(e) => handlePost(e)}>
+            <div className="input-group">
+              <input
+                name="project"
+                value={formData.project}
+                type="text"
+                placeholder="Project"
+                onChange={handleChange}
+                className="input-field"
+                maxLength={15}
+              />
+              {errors.project && (
+                <span className="error">{errors.project}</span>
+              )}
+            </div>
+            <div className="input-group">
+              <input
+                name="description"
+                value={formData.description}
+                type="text"
+                placeholder="Description"
+                onChange={handleChange}
+                className="input-field"
+              />
+              {errors.description && (
+                <span className="error">{errors.description}</span>
+              )}
+            </div>
 
-        <button type="submit" disabled={isSubmitting} className="submit-button">
-          {isSubmitting ? "Posting...." : "Post"}
-        </button>
-      </form>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="submit-button"
+            >
+              {isSubmitting ? "Posting...." : "Post"}
+            </button>
+          </form>
+        </div>
+      ) : (
+        <div className="post-text">
+          Please
+          <Link href="/login" className="link">
+            login
+          </Link>
+          or
+          <Link href="/signup" className="link">
+            sign up
+          </Link>
+          first
+        </div>
+      )}
     </div>
   );
 }

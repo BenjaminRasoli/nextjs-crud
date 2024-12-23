@@ -14,7 +14,7 @@
       padding: 10px;
       margin-top: 20px;
     }
-    
+
     .error {
       color: rgb(255, 0, 0);
       font-size: 18px;
@@ -41,5 +41,19 @@
 }
 
 span {
+  color: $link-color;
+}
+
+span:hover {
+  text-decoration: underline;
+}
+
+.signup-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+  font-size: 18px;
   color: $primary-color;
 }

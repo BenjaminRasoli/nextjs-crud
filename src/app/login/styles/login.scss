@@ -16,7 +16,7 @@
     color: rgb(255, 0, 0);
     font-size: 18px;
     margin-top: 4px;
-  } 
+  }
 
   button:hover {
     cursor: pointer;
@@ -26,5 +26,19 @@
 }
 
 span {
+  color: $link-color;
+}
+
+span:hover {
+  text-decoration: underline;
+}
+
+.login-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+  font-size: 18px;
   color: $primary-color;
 }

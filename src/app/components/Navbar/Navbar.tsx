@@ -1,6 +1,6 @@
 import { AuthContext } from "@/app/context/AuthContext";
 import Link from "next/link";
-import React, { useContext } from "react";
+import { useContext } from "react";
 import "./styles/Navbar.scss";
 import { useRouter } from "next/navigation";
 
@@ -13,7 +13,7 @@ function Navbar() {
     dispatch({ type: "LOGOUT", payload: null });
     router.push("/login");
   };
-  return (
+    return (
     <nav>
       <div>
         <Link href={"/"}>Home</Link>

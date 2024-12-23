@@ -5,7 +5,6 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
   background-color: $secondary-color;
   font-family: "Arial", sans-serif;
   padding: 20px;
@@ -52,4 +51,25 @@
 
 .user-info-card:last-child .user-info-field {
   border-bottom: none;
+}
+
+.userinfo-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+  font-size: 18px;
+  color: $text-color;
+}
+
+.link {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: bold;
+  margin: 0 5px;
+}
+
+.link:hover {
+  text-decoration: underline;
 }

@@ -20,7 +20,7 @@ function Page() {
   }
 
   const router = useRouter();
-  const { dispatch } = useContext(AuthContext);
+  const { dispatch, currentUser } = useContext(AuthContext);
   const [userData, setUserData] = useState<UserData>({
     firstName: "",
     lastName: "",
@@ -140,79 +140,91 @@ function Page() {
   };
 
   return (
-    <div className="container">
-      <h1 style={{ color: "#cccaca" }}>Sign up</h1>
-      <form onSubmit={handleLogin} className="signUpForm">
-        <div className="input-group">
-          <input
-            type="text"
-            name="firstName"
-            placeholder="First Name"
-            value={userData.firstName}
-            onChange={handleUserData}
-            maxLength={15}
-          />
-          {errors.firstName && (
-            <span className="error">{errors.firstName}</span>
-          )}
+    <div>
+      {!currentUser ? (
+        <div className="container">
+          <h1 style={{ color: "#cccaca" }}>Sign up</h1>
+          <form onSubmit={handleLogin} className="signUpForm">
+            <div className="input-group">
+              <input
+                type="text"
+                name="firstName"
+                placeholder="First Name"
+                value={userData.firstName}
+                onChange={handleUserData}
+                maxLength={15}
+              />
+              {errors.firstName && (
+                <span className="error">{errors.firstName}</span>
+              )}
+            </div>
+
+            <div className="input-group">
+              <input
+                type="text"
+                name="lastName"
+                placeholder="Last Name"
+                value={userData.lastName}
+                onChange={handleUserData}
+                maxLength={15}
+              />
+              {errors.lastName && (
+                <span className="error">{errors.lastName}</span>
+              )}
+            </div>
+
+            <div className="input-group">
+              <input
+                type="text"
+                name="userName"
+                placeholder="User Name"
+                value={userData.userName}
+                onChange={handleUserData}
+                maxLength={15}
+              />
+              {errors.userName && (
+                <span className="error">{errors.userName}</span>
+              )}
+            </div>
+
+            <div className="input-group">
+              <input
+                type="text"
+                name="email"
+                placeholder="Email"
+                value={userData.email}
+                onChange={handleUserData}
+                maxLength={25}
+              />
+              {errors.email && <span className="error">{errors.email}</span>}
+            </div>
+
+            <div className="input-group">
+              <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                value={userData.password}
+                onChange={handleUserData}
+              />
+              {errors.password && (
+                <span className="error">{errors.password}</span>
+              )}
+            </div>
+
+            <button type="submit">Sign Up</button>
+          </form>
+
+          <p style={{ color: "#cccaca" }}>
+            Already have an account?
+            <Link href={"/login"}>
+              <span> Login</span>
+            </Link>
+          </p>
         </div>
-
-        <div className="input-group">
-          <input
-            type="text"
-            name="lastName"
-            placeholder="Last Name"
-            value={userData.lastName}
-            onChange={handleUserData}
-            maxLength={15}
-          />
-          {errors.lastName && <span className="error">{errors.lastName}</span>}
-        </div>
-
-        <div className="input-group">
-          <input
-            type="text"
-            name="userName"
-            placeholder="User Name"
-            value={userData.userName}
-            onChange={handleUserData}
-            maxLength={15}
-          />
-          {errors.userName && <span className="error">{errors.userName}</span>}
-        </div>
-
-        <div className="input-group">
-          <input
-            type="text"
-            name="email"
-            placeholder="Email"
-            value={userData.email}
-            onChange={handleUserData}
-            maxLength={25}
-          />
-          {errors.email && <span className="error">{errors.email}</span>}
-        </div>
-
-        <div className="input-group">
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={userData.password}
-            onChange={handleUserData}
-          />
-          {errors.password && <span className="error">{errors.password}</span>}
-        </div>
-
-        <button type="submit">Sign Up</button>
-      </form>
-
-      <p>
-        Already have an account?
-        <Link href={"/login"}>
-          <span> Login</span>
-        </Link>
-      </p>
+      ) : (
+        <div className="signup-text">You are already logged in.</div>
+      )}
     </div>
   );
 }

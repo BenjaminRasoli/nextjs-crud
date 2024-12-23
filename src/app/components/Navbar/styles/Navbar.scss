@@ -7,8 +7,13 @@ nav {
   padding: 30px 20px;
   background-color: $primary-color;
   color: $text-color;
-    font-size: 20px;
+  font-size: 20px;
+}
 
+@media only screen and (max-width: 360px) {
+  nav {
+  font-size: 13px;
+  }
 }
 
 nav a {
@@ -41,6 +46,12 @@ nav button {
   margin-left: 10px;
   font-size: 20px;
   transition: background-color 0.3s ease;
+}
+
+@media only screen and (max-width: 360px) {
+  nav button{
+  font-size: 13px;
+  }
 }
 
 nav button:hover {
