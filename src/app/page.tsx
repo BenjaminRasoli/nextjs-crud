@@ -23,7 +23,7 @@ interface Post {
   imageUrl: string;
   description: string;
   currentUser: User;
-  [key: string]: any;
+  userName: string;
 }
 
 function Home() {
@@ -111,6 +111,7 @@ function Home() {
                         type="text"
                         name="name"
                         placeholder="Name"
+                        maxLength={20}
                         value={editFormData.name || ""}
                         onChange={handleEditChange}
                       />

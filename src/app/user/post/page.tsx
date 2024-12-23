@@ -89,7 +89,7 @@ function Page() {
     Array.from(selectedFiles).forEach((file) => {
       image.append("file", file);
     });
-    
+
     const cloudinaryPrest = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET;
     if (!cloudinaryPrest) {
       throw new Error("Cloudinary upload preset is not set.");
@@ -143,15 +143,20 @@ function Page() {
       return;
     }
     try {
-      await setDoc(doc(db, "post", currentUser.uid), {
-        name: formData.project,
-        description: formData.description,
-        imageUrl: imageUrl,
-        userId: currentUser.uid,
-        firstName: currentUser.firstName,
-        lastName: currentUser.lastName,
-        userName: currentUser.userName,
-      });
+      if (currentUser?.uid) {
+        await setDoc(doc(db, "post", currentUser.uid), {
+          name: formData.project,
+          description: formData.description,
+          imageUrl: imageUrl,
+          userId: currentUser.uid,
+          firstName: currentUser.firstName,
+          lastName: currentUser.lastName,
+          userName: currentUser.userName,
+        });
+      } else {
+        console.error("No user is logged in or user UID is undefined");
+      }
+
       router.push("/");
       setIsSubmitting(false);
     } catch (error) {

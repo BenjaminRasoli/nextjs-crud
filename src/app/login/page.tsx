@@ -88,25 +88,27 @@ function Page() {
         <div className="container">
           <h1 style={{ color: "#cccaca" }}>Login</h1>
           <form onSubmit={handleLogin} className="loginForm">
-            <input
-              type="email"
-              placeholder="email"
-              value={email}
-              maxLength={25}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            {errors.email && <span className="error">{errors.email}</span>}
-
-            <input
-              type="password"
-              placeholder="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            {errors.password && (
-              <span className="error">{errors.password}</span>
-            )}
-
+            <div className="input-group">
+              <input
+                type="email"
+                placeholder="email"
+                value={email}
+                maxLength={25}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              {errors.email && <span className="error">{errors.email}</span>}
+            </div>
+            <div className="input-group">
+              <input
+                type="password"
+                placeholder="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              {errors.password && (
+                <span className="error">{errors.password}</span>
+              )}
+            </div>
             <button type="submit">Login</button>
             {errors.invalid && <span className="error">{errors.invalid}</span>}
           </form>

@@ -6,6 +6,13 @@
 This project is a fully functional CRUD (Create, Read, Update, Delete) application built using modern web technologies: **React**, **TypeScript**, **Next.js**, **Firebase**, and **Cloudinary**. The app is designed to manage data with Firebase Firestore, upload images to Cloudinary, and includes user authentication.
 
 ---
+## Live Preview
+
+Link:[]() 
+
+
+---
+
 
 ## Features
 

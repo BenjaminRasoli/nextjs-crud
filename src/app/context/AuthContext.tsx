@@ -4,18 +4,18 @@ import {
   useEffect,
   useReducer,
   ReactNode,
-  ActionDispatch,
+  Dispatch,
 } from "react";
-import AuthReducer from "./AuthReducer";
+import AuthReducer, { User } from "./AuthReducer";
 
 interface AuthContextType {
-  currentUser: any;
-  dispatch: any;
+  currentUser: User | null;
+  dispatch: Dispatch<any>;
 }
 
 const INITIAL_STATE = {
   currentUser: JSON.parse(localStorage.getItem("user") as string) || null,
-  dispatch: "",
+  dispatch: () => {},
 };
 
 export const AuthContext = createContext<AuthContextType>(INITIAL_STATE);
@@ -36,7 +36,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
   return (
     <AuthContext.Provider
       value={{
-        currentUser: state.currentUser !== null && state.currentUser,
+        currentUser: state.currentUser,
         dispatch,
       }}
     >
