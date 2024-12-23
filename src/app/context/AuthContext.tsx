@@ -14,7 +14,10 @@ interface AuthContextType {
 }
 
 const INITIAL_STATE = {
-  currentUser: JSON.parse(localStorage.getItem("user") as string) || null,
+  currentUser:
+    typeof window !== "undefined"
+      ? JSON.parse(localStorage.getItem("user") as string) || null
+      : null,
   dispatch: () => {},
 };
 
