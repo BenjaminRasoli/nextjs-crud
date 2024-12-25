@@ -1,6 +1,6 @@
 "use client";
 import React, { useContext, useState } from "react";
-import { doc, setDoc } from "firebase/firestore";
+import { addDoc, collection } from "firebase/firestore";
 import { db } from "../../config/firebase-config";
 import "./styles/post.scss";
 import { AuthContext } from "@/app/context/AuthContext";
@@ -144,7 +144,7 @@ function Page() {
     }
     try {
       if (currentUser?.uid) {
-        await setDoc(doc(db, "post", currentUser.uid), {
+        await addDoc(collection(db, "posts"), {
           name: formData.project,
           description: formData.description,
           imageUrl: imageUrl,

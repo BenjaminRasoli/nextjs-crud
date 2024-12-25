@@ -5,16 +5,23 @@ function Footer() {
   return (
     <footer className="footer">
       <div className="footer-content">
-        <p>© 2024 Your Company. All Rights Reserved.</p>
+        <p>© 2024 Benjamin Rasoli. All Rights Reserved.</p>
         <ul className="footer-links">
           <li>
-            <a href="/privacy-policy">Privacy Policy</a>
+            <a
+              href="https://www.linkedin.com/in/benjamin-rasoli-2948ab300"
+              target="_blank"
+            >
+              Linkedin
+            </a>
           </li>
           <li>
-            <a href="/terms-of-service">Terms of Service</a>
+            <a href="https://github.com/BenjaminRasoli" target="_blank">
+              Github
+            </a>
           </li>
           <li>
-            <a href="/contact">Contact Us</a>
+            <a href="mailto:benjaminrasoli05@gmail.com">Contact</a>
           </li>
         </ul>
       </div>

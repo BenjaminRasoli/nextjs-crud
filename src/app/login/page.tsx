@@ -93,7 +93,7 @@ function Page() {
                 type="email"
                 placeholder="email"
                 value={email}
-                maxLength={25}
+                maxLength={45}
                 onChange={(e) => setEmail(e.target.value)}
               />
               {errors.email && <span className="error">{errors.email}</span>}
@@ -112,7 +112,7 @@ function Page() {
             <button type="submit">Login</button>
             {errors.invalid && <span className="error">{errors.invalid}</span>}
           </form>
-          <p style={{ color: "#cccaca" }}>
+          <p className="already-have" style={{ color: "#cccaca" }}>
             don't have an account?
             <Link href={"/signup"}>
               <span> Sign Up</span>

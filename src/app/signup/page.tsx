@@ -194,7 +194,7 @@ function Page() {
                 placeholder="Email"
                 value={userData.email}
                 onChange={handleUserData}
-                maxLength={25}
+                maxLength={45}
               />
               {errors.email && <span className="error">{errors.email}</span>}
             </div>
@@ -215,7 +215,7 @@ function Page() {
             <button type="submit">Sign Up</button>
           </form>
 
-          <p style={{ color: "#cccaca" }}>
+          <p className="already-have" style={{ color: "#cccaca" }}>
             Already have an account?
             <Link href={"/login"}>
               <span> Login</span>

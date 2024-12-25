@@ -22,7 +22,7 @@
       line-height: 1.5;
 
       &:focus {
-        border-color: #4a90e2; 
+        border-color: #4a90e2;
       }
     }
 
@@ -51,7 +51,7 @@ span {
   color: $link-color;
 }
 
-span:hover {
+.already-have span:hover {
   text-decoration: underline;
 }
 

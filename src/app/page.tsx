@@ -24,6 +24,7 @@ interface Post {
   description: string;
   currentUser: User;
   userName: string;
+  userId: string;
 }
 
 function Home() {
@@ -34,7 +35,7 @@ function Home() {
 
   useEffect(() => {
     const unsub = onSnapshot(
-      collection(db, "post"),
+      collection(db, "posts"),
       (snapShot) => {
         const list: Post[] = snapShot.docs.map((doc) => {
           const data = doc.data() as Post;
@@ -53,7 +54,7 @@ function Home() {
 
   const handleDelete = async (id: string) => {
     try {
-      await deleteDoc(doc(db, "post", id));
+      await deleteDoc(doc(db, "posts", id));
       setPosts((prevPosts) => prevPosts.filter((post) => post.id !== id));
     } catch (error) {
       console.error("Error deleting post:", error);
@@ -75,7 +76,7 @@ function Home() {
 
   const handleSave = async (id: string) => {
     try {
-      const postRef = doc(db, "post", id);
+      const postRef = doc(db, "posts", id);
       await setDoc(postRef, editFormData);
       setEditingPostId(null);
     } catch (error) {
@@ -135,7 +136,7 @@ function Home() {
                       <p>
                         <b> owner:</b> {post.userName || "N/A"}
                       </p>
-                      {post.id === currentUser?.uid ? (
+                      {post.userId === currentUser?.uid ? (
                         <>
                           <div className="card-buttons">
                             <button
